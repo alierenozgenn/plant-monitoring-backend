@@ -1,6 +1,6 @@
 """
 Smart Plant Monitoring System
-Flutter mobil uygulaması için optimize edildi
+Render deployment için optimize edildi
 """
 
 from flask import Flask
@@ -74,7 +74,8 @@ def register_blueprints(app):
         
     except Exception as e:
         logger.error(f"❌ Error registering blueprints: {str(e)}")
-        raise
+        # Hata olsa bile devam et
+        pass
 
 def initialize_services(app):
     """Servisleri başlat ve durumlarını kontrol et"""
@@ -111,7 +112,6 @@ def initialize_services(app):
             
             # Sistem durumu özeti
             logger.info("📱 Smart Plant Monitoring API ready for Flutter!")
-            logger.info(f"🔗 Flutter can connect to: http://YOUR_IP:5000")
             logger.info(f"🎯 System Mode: Single User + Single Plant")
             
         except Exception as e:
@@ -125,10 +125,10 @@ app = create_app()
 if __name__ == '__main__':
     logger = logging.getLogger(__name__)
     
-    # Port ayarı
+    # Port ayarı (Render için)
     port = int(os.environ.get('PORT', 5000))
     
-    # Debug mode
+    # Debug mode (production'da False)
     debug_mode = os.environ.get('FLASK_ENV') == 'development'
     
     # Başlatma mesajları
@@ -139,36 +139,11 @@ if __name__ == '__main__':
     print(f"🔧 Debug Mode: {debug_mode}")
     print(f"⏰ Start Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 60)
-    
-    # Flutter için endpoint'leri listele
-    with app.app_context():
-        print("📱 Flutter API Endpoints:")
-        print("   System:")
-        print("     GET  /              - API info")
-        print("     GET  /health        - Health check")
-        print("     GET  /api/system-status - Detailed status")
-        print("   Plant Management:")
-        print("     GET  /api/plants           - Available plants")
-        print("     POST /api/identify-plant   - Plant identification")
-        print("     POST /api/plant-selection  - Save plant choice")
-        print("     GET  /api/plant-profile    - Get plant profile")
-        print("     POST /api/plant-profile    - Create/update profile")
-        print("   Watering:")
-        print("     POST /api/trigger-watering  - Manual watering")
-        print("     GET  /api/watering-history  - Watering history")
-        print("     GET  /api/moisture-history  - Moisture history")
-        print("   Health:")
-        print("     POST /api/check-disease     - Disease detection")
-        print("     GET  /api/disease-history   - Disease history")
-        print("   ESP32:")
-        print("     POST /api/pump-status      - Pump status from ESP32")
-        print("     GET  /api/should-water     - Water command for ESP32")
-        print("=" * 60)
-        print("🚀 Ready for Flutter connection!")
+    print("🚀 Ready for Flutter connection!")
     
     try:
         app.run(
-            host='0.0.0.0',  # Flutter'dan erişim için
+            host='0.0.0.0',  # Render için
             port=port,
             debug=debug_mode
         )

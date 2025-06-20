@@ -66,6 +66,26 @@ def create_app():
             "timestamp": datetime.now().isoformat()
         }), 200
     
+    # Endpoints listesi (Flutter için) - YENİ EKLENEN
+    @app.route('/endpoints')
+    def endpoints():
+        return jsonify({
+            "project": "Smart Plant Monitoring",
+            "version": "1.0.0",
+            "available_endpoints": [
+                "/",
+                "/health", 
+                "/endpoints",
+                "/api/sensor/moisture",
+                "/api/water/manual",
+                "/api/plant/identify",
+                "/api/plant/disease-detect",
+                "/api/profile/info"
+            ],
+            "total_count": 8,
+            "flutter_ready": True
+        })
+    
     return app
 
 def register_blueprints(app):
